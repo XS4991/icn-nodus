@@ -61,7 +61,8 @@ EOF
 }
 
 set_snat_default_inteface() {
-    default_interface=$(awk '$2 == 00000000 { print $1 }' /proc/net/route)
+    default_interfaces=$(awk '$2 == 00000000 { print $1 }' /proc/net/route)
+    default_interface=$(echo $default_interfaces | cut -d ' ' -f 1)
 
     # Checking the SNAT for default interfaces
     if ! iptables -t nat -C POSTROUTING -o $default_interface -j MASQUERADE 2>/dev/null ; then
